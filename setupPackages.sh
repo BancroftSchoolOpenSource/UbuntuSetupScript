@@ -236,6 +236,7 @@ sudo cp -r $SCRIPT/.config/cura/ /etc/skel/.config/
 sudo apt install flatpak
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install flathub net.mkiol.SpeechNote
+flatpak install flathub com.prusa3d.PrusaSlicer
 
 echo "Success! All Packaged Installed!"
 
