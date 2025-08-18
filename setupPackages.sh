@@ -4,12 +4,41 @@ set -e
 SBA=SceneBuilder-21.0.0.deb
 APPINVENT=aisetup.deb
 APPINVENTDesktop="AppInventorTerminal.desktop"
+OBSIDIANDesktop="Obsidian.desktop"
 FreecadDesktop="Freecad.desktop"
 #https://github.com/FreeCAD/FreeCAD-Bundle/releases/download/weekly-builds/
 FREECAD=FreeCAD_1.0.0-conda-Linux-x86_64-py311.AppImage
-if (! test -e ~/bin/ ) then
-	mkdir ~/bin/
+if (! test -e $HOME/bin/ ) then
+	mkdir $HOME/bin/
 fi
+#https://github.com/obsidianmd/obsidian-releases/releases/download/v1.9.10/Obsidian-1.9.10.AppImage
+
+OBSIDIAN=Obsidian-1.9.10.AppImage
+if (! test -e $OBSIDIAN) then
+	#sudo apt -y install zlib1g:i386 lib32stdc++6 libstdc++6:i386 lib32z1
+
+	wget https://github.com/obsidianmd/obsidian-releases/releases/download/v1.9.10/Obsidian-1.9.10.AppImage -O $OBSIDIAN
+	cp $OBSIDIAN $HOME/bin/obsidian
+	chmod +x $HOME/bin/obsidian
+	cp obsidian.png $HOME/bin/obsidian.png
+	echo "[Desktop Entry]
+	Version=1.0
+	Type=Application
+	Name=Obsidian
+	Comment=
+	Exec=$HOME/bin/obsidian  --no-sandbox
+	Icon=$HOME/bin/obsidian.png
+	Path=""
+	Terminal=true
+	StartupNotify=false" > $OBSIDIANDesktop
+  	sudo chmod +x $OBSIDIANDesktop
+	gio set $OBSIDIANDesktop "metadata::trusted" yes
+	sudo desktop-file-install $OBSIDIANDesktop
+	exit 0
+else
+	echo "$OBSIDIAN installed "
+fi
+
 if (! test -e $APPINVENT) then
 	sudo apt -y install zlib1g:i386 lib32stdc++6 libstdc++6:i386 lib32z1
 	sudo rm -rf /usr/google/appinventor/
@@ -42,7 +71,7 @@ if (! test -e $FreecadDesktop) then
 	echo "[Desktop Entry]
 	Version=1.0
 	Type=Application
-	Name=FreeCAD 0.22.0
+	Name=FreeCAD 1.0.0
 	Comment=
 	Exec=/usr/local/bin/freecad
 	Icon=/usr/local/bin/FreeCAD-logo.png
@@ -63,10 +92,10 @@ if (! test -e $SBA) then
 else
 	echo "$SBA installed "
 fi
-
-wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
-sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list'
-sudo add-apt-repository -y ppa:openshot.developers/ppa
+sudo apt install -y curl
+curl -fSsL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor | sudo tee /usr/share/keyrings/google-chrome.gpg > /dev/null
+echo deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main | sudo tee /etc/apt/sources.list.d/google-chrome.list
+#sudo add-apt-repository -y ppa:openshot.developers/ppa
 sudo add-apt-repository -y ppa:sunderme/texstudio
 #sudo add-apt-repository -y ppa:sylvain-pineau/kazam
 set +e
@@ -83,7 +112,7 @@ else
 	echo "$GITHUBDESKTOP installed "
 fi
 
-sudo apt install -y git  texstudio python3-pip mesa-utils openshot-qt python3-openshot ssh net-tools build-essential curl wget inkscape docker.io  libfuse2 nodejs npm sssd-ad sssd-tools realmd adcli krita obs-studio godot3 google-chrome-stable kazam gnome-sound-recorder ffmpeg gedit f3d python3-serial
+sudo apt install -y git  texstudio python3-pip mesa-utils openshot-qt ssh net-tools build-essential curl wget inkscape docker.io  libfuse2 nodejs npm sssd-ad sssd-tools realmd adcli krita obs-studio godot3 google-chrome-stable kazam gnome-sound-recorder ffmpeg gedit f3d python3-serial
 sudo apt purge -y modemmanager scratch brltty meshlab
 #sudo pip install pyserial
 
@@ -239,7 +268,6 @@ flatpak install flathub net.mkiol.SpeechNote
 flatpak install flathub com.prusa3d.PrusaSlicer
 
 echo "Success! All Packaged Installed!"
-
 
 
 
