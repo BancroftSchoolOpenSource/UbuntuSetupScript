@@ -1,6 +1,6 @@
 #!/bin/bash
 SCRIPT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-set -e
+#set -e
 SBA=SceneBuilder-21.0.0.deb
 APPINVENT=aisetup.deb
 APPINVENTDesktop="AppInventorTerminal.desktop"
@@ -101,7 +101,7 @@ sudo add-apt-repository -y ppa:sunderme/texstudio
 set +e
 sudo apt update
 sudo apt  -y upgrade
-set -e
+#set -e
 GITHUBDESKTOPRELEASE=3.3.5-linux2
 #https://github.com/shiftkey/desktop/releases/download/release-3.3.5-linux2/GitHubDesktop-linux-amd64-3.3.5-linux2.deb
 GITHUBDESKTOP=GitHubDesktop-linux-amd64-$GITHUBDESKTOPRELEASE.deb
@@ -199,7 +199,7 @@ if (! test -e $SCRATCHJR) then
 	cd $SCRATCHJR
 	set +e
 	npm install && npm run publish
-	set -e
+	#set -e
 	sudo dpkg -i $SCRATCHJR/out/make/scratchjr*.deb
  	cd $SCRIPT/
 fi
